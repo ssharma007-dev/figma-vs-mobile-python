@@ -61,7 +61,7 @@ CAPTURE=sdk IOS_UDID=<simulator udid> PLATFORM_VERSION=<iOS version> pytest test
 Example:
 
 ```
-CAPTURE=nml IOS_UDID=258C9CC4-4C21-44CB-903B-AEA4C056B484 PLATFORM_VERSION=18.0 pytest test_figma_ios.py
+CAPTURE=nml DEVICE_NAME="iPhone 16" PLATFORM_VERSION=18.0 pytest test_figma_ios.py
 ```
 
 The test opens the sample app in `app/`, captures the screen for each frame in `figma_config.py`, and compares it with the Figma frame. To run your own app, add `APP_PATH=/path/to/your/app` in front of the command.
