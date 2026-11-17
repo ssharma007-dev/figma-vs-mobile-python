@@ -4,6 +4,43 @@ Requirement: the Figma frames are already exported to the Eyes Dashboard with th
 
 Requirement: Python 3.9+, Node.js, and an iOS Simulator (Xcode).
 
+## Sample values
+
+| Value | Where it comes from | Sample value |
+|---|---|---|
+| `APPLITOOLS_API_KEY` | Eyes Dashboard → your profile → My API key | `aBcD1234...` |
+| `APP_NAME` | Figma plugin → App name | `NML Python – Figma vs Mobile (demo) - Page 1` |
+| `frame` | Figma frame name (= test name in Eyes) | `iOS / Main Screen` |
+| `baseline_env_name` | Figma plugin → Eyes configuration details → Baseline name | `Figma \| iOS / Main Screen` |
+| `fully` | `False`: visible screen only, `True`: full scrollable screen | `False` |
+| `IOS_UDID` | `xcrun simctl list devices available` | `258C9CC4-4C21-44CB-903B-AEA4C056B484` |
+| `DEVICE_NAME` (iOS, instead of `IOS_UDID`) | Simulator name | `iPhone 16` |
+| `PLATFORM_VERSION` | Simulator / emulator OS version | `18.0` |
+| `CAPTURE` | How the screen is captured | `nml` or `sdk` |
+
+Your values come from your own Figma export; the Baseline name is whatever the plugin shows for each frame.
+
+Sample `figma_config.py`:
+
+```python
+APP_NAME = "NML Python – Figma vs Mobile (demo) - Page 1"
+
+FRAMES = {
+    "nml": [
+        {"frame": "iOS / Main Screen", "baseline_env_name": "Figma | iOS / Main Screen",
+         "node_id": "1:28", "fully": False},
+        {"frame": "iOS / Main Screen | Full", "baseline_env_name": "Figma | iOS / Main Screen | Full",
+         "node_id": "3:2", "fully": True},
+    ],
+    "sdk": [
+        {"frame": "SDK / iOS / Viewport", "baseline_env_name": "Figma | SDK / iOS / Viewport",
+         "node_id": "4:2", "fully": False},
+        {"frame": "SDK / iOS / Full Page", "baseline_env_name": "Figma | SDK / iOS / Full Page",
+         "node_id": "4:72", "fully": True},
+    ],
+}
+```
+
 ## Step 1: Install
 
 ```

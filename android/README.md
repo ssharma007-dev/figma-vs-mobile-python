@@ -4,6 +4,38 @@ Requirement: the Figma frames are already exported to the Eyes Dashboard with th
 
 Requirement: Python 3.9+, Node.js, and an Android emulator (Android Studio).
 
+## Sample values
+
+| Value | Where it comes from | Sample value |
+|---|---|---|
+| `APPLITOOLS_API_KEY` | Eyes Dashboard → your profile → My API key | `aBcD1234...` |
+| `APP_NAME` | Figma plugin → App name | `NML Python – Figma vs Mobile (demo) - Page 1` |
+| `frame` | Figma frame name (= test name in Eyes) | `Android / Main Screen` |
+| `baseline_env_name` | Figma plugin → Eyes configuration details → Baseline name | `Figma \| Android / Main Screen` |
+| `fully` | `False`: visible screen only, `True`: full scrollable screen | `True` |
+| `AVD_NAME` | `emulator -list-avds` | `Pixel_9` |
+| `PLATFORM_VERSION` | Simulator / emulator OS version | `16` |
+| `CAPTURE` | How the screen is captured | `nml` or `sdk` |
+
+Your values come from your own Figma export; the Baseline name is whatever the plugin shows for each frame.
+
+Sample `figma_config.py`:
+
+```python
+APP_NAME = "NML Python – Figma vs Mobile (demo) - Page 1"
+
+FRAMES = {
+    "nml": [
+        {"frame": "Android / Main Screen", "baseline_env_name": "Figma | Android / Main Screen",
+         "node_id": "2:2", "fully": True},
+    ],
+    "sdk": [
+        {"frame": "SDK / Android / Viewport", "baseline_env_name": "Figma | SDK / Android / Viewport",
+         "node_id": "4:142", "fully": False},
+    ],
+}
+```
+
 ## Step 1: Install
 
 ```
