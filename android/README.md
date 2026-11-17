@@ -1,6 +1,6 @@
 # Figma vs Android app — execution steps
 
-Requirement: the Figma frames are already exported to the Eyes Dashboard with the Applitools Eyes Figma plugin.
+Requirement: the Figma frames are already exported to the Eyes Dashboard with the [Applitools Eyes Figma plugin](https://www.applitools.com/docs/eyes/integrations/design-validation/figma-plugin), and you have the **Baseline name** of each frame. After the export, the plugin shows it under **Eyes configuration details**. Copy it into `baseline_env_name` in `figma_config.py`.
 
 Requirement: Python 3.9+, Node.js, and an Android emulator (Android Studio).
 
