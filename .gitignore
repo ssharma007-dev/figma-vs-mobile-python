@@ -1,0 +1,6 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+static_instrumented_sample_application/
+figma_exports/
