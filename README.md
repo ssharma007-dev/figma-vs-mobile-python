@@ -2,6 +2,14 @@
 
 Requirement: the Figma frames are already exported to the Eyes Dashboard with the [Applitools Eyes Figma plugin](https://www.applitools.com/docs/eyes/integrations/design-validation/figma-plugin), and you have the **Baseline name** of each frame. After the export, the plugin shows it under **Eyes configuration details**. Copy it into `baseline_env_name` in `figma_config.py`.
 
+Export from Figma: **Plugins → Applitools Eyes → Export to Eyes**.
+
+<img src="docs/screenshots/figma-plugin-export.png" alt="Applitools Eyes Figma plugin" width="360">
+
+After the export, open **Eyes configuration details** and copy the **Baseline name** (for example `Frame1_685`).
+
+<img src="docs/screenshots/figma-plugin-baseline-name.png" alt="Baseline name in Eyes configuration details" width="360">
+
 Requirement: Appium is running (`appium`), the iOS Simulator or Android emulator is started, and the Figma values are in `figma_config.py`. The README in [`ios/`](ios) or [`android/`](android) shows how.
 
 ## Sample values
@@ -11,7 +19,7 @@ Requirement: Appium is running (`appium`), the iOS Simulator or Android emulator
 | `APPLITOOLS_API_KEY` | Eyes Dashboard → your profile → My API key | `aBcD1234...` |
 | `APP_NAME` | Figma plugin → App name | `NML Python – Figma vs Mobile (demo) - Page 1` |
 | `frame` | Figma frame name (= test name in Eyes) | `iOS / Main Screen`, `Android / Main Screen` |
-| `baseline_env_name` | Figma plugin → Eyes configuration details → Baseline name | `Figma \| iOS / Main Screen` |
+| `baseline_env_name` | Figma plugin → Eyes configuration details → Baseline name | `Frame1_685` (`Figma \| iOS / Main Screen` in the sample below) |
 | `fully` | `False`: visible screen only, `True`: full scrollable screen | `False` |
 | `IOS_UDID` | `xcrun simctl list devices available` | `258C9CC4-4C21-44CB-903B-AEA4C056B484` |
 | `DEVICE_NAME` (iOS, instead of `IOS_UDID`) | Simulator name | `iPhone 16` |
@@ -114,3 +122,9 @@ The test prints one Eyes link per Figma frame. Open it in the Eyes Dashboard:
 
 - **Passed**: the app screen matches the Figma frame.
 - **Unresolved**: Eyes found differences; they are highlighted on the screen. Accept (thumbs up) or reject (thumbs down) each one.
+
+<img src="docs/screenshots/eyes-baseline-vs-checkpoint-ios.png" alt="iOS: Figma baseline vs app checkpoint" width="560">
+
+<img src="docs/screenshots/eyes-baseline-vs-checkpoint-android.png" alt="Android: Figma baseline vs app checkpoint" width="560">
+
+The baseline is the Figma frame; the checkpoint is the app screen. Here Checklist shows `0/4` in Figma and `1/4` in the app, and the test still passes: Layout checks position and structure, not text. Use `MATCH_LEVEL=STRICT` to catch text and colour differences too.
