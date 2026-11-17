@@ -17,15 +17,24 @@ FIGMA_FILE_KEY = "xC9J1Z2yFx5XYc7Uglv5KE"
 
 PLACEHOLDER = "<paste from Figma plugin>"
 
-# One entry per Figma frame = one Eyes test.
+# One entry per Figma frame = one Eyes test, per capture mode (CAPTURE=nml or CAPTURE=sdk).
 #   frame              — Figma frame name (the plugin's test name and step name)
 #   baseline_env_name  — "Baseline name" copied from the plugin's "Eyes configuration details"
 #   node_id            — only used by figma_baseline.py (node-id=1-28 in the Figma URL → "1:28")
 #   fully              — False: visible screen only; True: full scrollable screen
-FRAMES = [
-    {"frame": "Android / Main Screen", "baseline_env_name": PLACEHOLDER,
-     "node_id": "2:2", "fully": True},     # 411x1898 — Android NML always captures the full scrollable screen
-]
+FRAMES = {
+    # NML (Native Mobile Library inside the app) captures the full app window, status bar included.
+    "nml": [
+        {"frame": "Android / Main Screen", "baseline_env_name": PLACEHOLDER,
+         "node_id": "2:2", "fully": True},     # 411x1898 — Android NML always captures the full scrollable screen
+    ],
+    # SDK (classic Appium screenshot) crops the status bar (≈54dp), so it has its own Figma frames.
+    # Classic Android doesn't scroll this screen, so the frame is the visible screen only.
+    "sdk": [
+        {"frame": "SDK / Android / Viewport", "baseline_env_name": PLACEHOLDER,
+         "node_id": "4:142", "fully": False},  # 412x847
+    ],
+}
 
 
 def baseline_env_name(frame):

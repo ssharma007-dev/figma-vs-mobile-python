@@ -1,12 +1,13 @@
-"""Android app screen (NML capture) vs its Figma frames."""
+"""Android app screen (NML or SDK capture) vs its Figma frames."""
 from applitools.selenium import Target
 
+from conftest import CAPTURE
 from figma_config import APP_NAME, FRAMES, baseline_env_name
 
 
 def test_app_matches_figma(driver, figma_eyes):
     # One Eyes test per Figma frame, named like the plugin export (test name = frame name).
-    for frame in FRAMES:
+    for frame in FRAMES[CAPTURE]:
         eyes = figma_eyes(baseline_env_name(frame))
         eyes.open(driver, APP_NAME, frame["frame"])
         # iOS NML saves each screenshot to a file named after the step, so "/" in a frame name breaks it.

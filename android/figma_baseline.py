@@ -12,10 +12,11 @@ ENV VARS (or .env file next to this script):
   APPLITOOLS_SERVER_URL  — optional; defaults to the Applitools public cloud
 
 USAGE:
-  python figma_baseline.py
+  python figma_baseline.py nml     # or: sdk
 """
 import json
 import os
+import sys
 import urllib.request
 
 from applitools.images import BatchInfo, Configuration, Eyes, Target
@@ -81,8 +82,9 @@ def upload_baseline(frame, path):
 
 def main():
     load_dotenv()
-    paths = export_frames(FRAMES, os.environ["FIGMA_ACCESS_TOKEN"])
-    for frame in FRAMES:
+    frames = FRAMES[sys.argv[1] if len(sys.argv) > 1 else "nml"]
+    paths = export_frames(frames, os.environ["FIGMA_ACCESS_TOKEN"])
+    for frame in frames:
         upload_baseline(frame, paths[frame["node_id"]])
 
 

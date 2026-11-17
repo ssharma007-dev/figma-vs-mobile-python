@@ -17,17 +17,27 @@ FIGMA_FILE_KEY = "xC9J1Z2yFx5XYc7Uglv5KE"
 
 PLACEHOLDER = "<paste from Figma plugin>"
 
-# One entry per Figma frame = one Eyes test.
+# One entry per Figma frame = one Eyes test, per capture mode (CAPTURE=nml or CAPTURE=sdk).
 #   frame              — Figma frame name (the plugin's test name and step name)
 #   baseline_env_name  — "Baseline name" copied from the plugin's "Eyes configuration details"
 #   node_id            — only used by figma_baseline.py (node-id=1-28 in the Figma URL → "1:28")
 #   fully              — False: visible screen only; True: full scrollable screen
-FRAMES = [
-    {"frame": "iOS / Main Screen", "baseline_env_name": PLACEHOLDER,
-     "node_id": "1:28", "fully": False},   # 393x852 — the visible screen
-    {"frame": "iOS / Main Screen | Full", "baseline_env_name": PLACEHOLDER,
-     "node_id": "3:2", "fully": True},     # 393x2056 — the full scrollable screen
-]
+FRAMES = {
+    # NML (Native Mobile Library inside the app) captures the full app window, status bar included.
+    "nml": [
+        {"frame": "iOS / Main Screen", "baseline_env_name": PLACEHOLDER,
+         "node_id": "1:28", "fully": False},   # 393x852 — the visible screen
+        {"frame": "iOS / Main Screen | Full", "baseline_env_name": PLACEHOLDER,
+         "node_id": "3:2", "fully": True},     # 393x2056 — the full scrollable screen
+    ],
+    # SDK (classic Appium screenshot) crops the status bar (≈53pt), so it has its own Figma frames.
+    "sdk": [
+        {"frame": "SDK / iOS / Viewport", "baseline_env_name": PLACEHOLDER,
+         "node_id": "4:2", "fully": False},    # 393x799 — the visible screen
+        {"frame": "SDK / iOS / Full Page", "baseline_env_name": PLACEHOLDER,
+         "node_id": "4:72", "fully": True},    # 393x1970 — the full scrollable screen
+    ],
+}
 
 
 def baseline_env_name(frame):

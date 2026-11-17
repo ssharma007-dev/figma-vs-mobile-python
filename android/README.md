@@ -26,7 +26,7 @@ export APPLITOOLS_API_KEY=<your Applitools API key>
 Copy these from the Figma export (plugin → **Eyes configuration details**):
 
 - `APP_NAME` = the App name.
-- For each frame in `FRAMES`:
+- For each frame in `FRAMES["nml"]` (NML capture) and `FRAMES["sdk"]` (SDK capture):
   - `frame` = the frame name (the test name in Eyes).
   - `baseline_env_name` = the Baseline name.
 
@@ -51,13 +51,17 @@ adb devices                    # the emulator shows as "device"
 ## Step 6: Run the test
 
 ```
-AVD_NAME=<avd name> PLATFORM_VERSION=<Android version> pytest test_figma_android.py
+CAPTURE=nml AVD_NAME=<avd name> PLATFORM_VERSION=<Android version> pytest test_figma_android.py
+CAPTURE=sdk AVD_NAME=<avd name> PLATFORM_VERSION=<Android version> pytest test_figma_android.py
 ```
+
+- `CAPTURE=nml` (default): the Applitools Native Mobile Library inside the app captures the screen.
+- `CAPTURE=sdk`: the Eyes Appium SDK captures an Appium screenshot (status bar cropped).
 
 Example:
 
 ```
-AVD_NAME=Pixel_9 PLATFORM_VERSION=16 pytest test_figma_android.py
+CAPTURE=nml AVD_NAME=Pixel_9 PLATFORM_VERSION=16 pytest test_figma_android.py
 ```
 
 The test opens the sample app in `app/`, captures the screen for each frame in `figma_config.py`, and compares it with the Figma frame. To run your own app, add `APP_PATH=/path/to/your/app` in front of the command.

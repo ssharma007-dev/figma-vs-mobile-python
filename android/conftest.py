@@ -1,9 +1,10 @@
 """
-Appium driver with NML, and Eyes pointed at the Figma baseline.
+Appium driver (NML or classic SDK capture), and Eyes pointed at the Figma baseline.
 
 ENV VARS:
   APPLITOOLS_API_KEY     — Applitools API key (required)
   APPLITOOLS_SERVER_URL  — optional; defaults to the Applitools public cloud
+  CAPTURE                — nml (default): NML library inside the app | sdk: classic Appium screenshot
   APPIUM_URL             — optional; default http://127.0.0.1:4723
   MATCH_LEVEL            — LAYOUT (default) | STRICT
   AVD_NAME, PLATFORM_VERSION — emulator to use (default Pixel_9, 16)
@@ -17,6 +18,7 @@ from appium import webdriver
 from appium.options.common import AppiumOptions
 from applitools.selenium import BatchInfo, ClassicRunner, Configuration, Eyes, MatchLevel
 
+CAPTURE = os.getenv("CAPTURE", "nml").lower()
 HERE = os.path.dirname(os.path.abspath(__file__))
 SAMPLE_APP = os.path.join(HERE, "app/Accessibility_static_xmllayout.apk")
 
@@ -69,8 +71,10 @@ def runner():
 @pytest.fixture
 def driver(api_key, server_url):
     caps = capabilities()
-    # NML: adds the launch arguments that let the Applitools library inside the app capture the screen.
-    Eyes.set_mobile_capabilities(caps, api_key, server_url)
+    if CAPTURE == "nml":
+        # NML: adds the launch arguments that let the Applitools library inside the app capture the screen.
+        Eyes.set_mobile_capabilities(caps, api_key, server_url)
+    # Without it, Eyes captures through Appium screenshots (classic SDK).
     driver = webdriver.Remote(os.getenv("APPIUM_URL", "http://127.0.0.1:4723"),
                               options=AppiumOptions().load_capabilities(caps))
     driver.implicitly_wait(10)
@@ -88,7 +92,7 @@ def figma_eyes(runner, api_key, server_url):
         config.set_api_key(api_key)
         if server_url:
             config.set_server_url(server_url)
-        config.set_batch(BatchInfo("Figma vs Android | Python"))
+        config.set_batch(BatchInfo("Figma vs Android | Python | " + CAPTURE.upper()))
         # The key line: compare against the baseline the Figma plugin created.
         config.set_baseline_env_name(baseline_env_name)
         config.set_match_level(MatchLevel[os.getenv("MATCH_LEVEL", "LAYOUT").upper()])

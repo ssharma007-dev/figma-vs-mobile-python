@@ -26,7 +26,7 @@ export APPLITOOLS_API_KEY=<your Applitools API key>
 Copy these from the Figma export (plugin → **Eyes configuration details**):
 
 - `APP_NAME` = the App name.
-- For each frame in `FRAMES`:
+- For each frame in `FRAMES["nml"]` (NML capture) and `FRAMES["sdk"]` (SDK capture):
   - `frame` = the frame name (the test name in Eyes).
   - `baseline_env_name` = the Baseline name.
 
@@ -51,13 +51,17 @@ open -a Simulator
 ## Step 6: Run the test
 
 ```
-IOS_UDID=<simulator udid> PLATFORM_VERSION=<iOS version> pytest test_figma_ios.py
+CAPTURE=nml IOS_UDID=<simulator udid> PLATFORM_VERSION=<iOS version> pytest test_figma_ios.py
+CAPTURE=sdk IOS_UDID=<simulator udid> PLATFORM_VERSION=<iOS version> pytest test_figma_ios.py
 ```
+
+- `CAPTURE=nml` (default): the Applitools Native Mobile Library inside the app captures the screen.
+- `CAPTURE=sdk`: the Eyes Appium SDK captures an Appium screenshot (status bar cropped).
 
 Example:
 
 ```
-IOS_UDID=258C9CC4-4C21-44CB-903B-AEA4C056B484 PLATFORM_VERSION=18.0 pytest test_figma_ios.py
+CAPTURE=nml IOS_UDID=258C9CC4-4C21-44CB-903B-AEA4C056B484 PLATFORM_VERSION=18.0 pytest test_figma_ios.py
 ```
 
 The test opens the sample app in `app/`, captures the screen for each frame in `figma_config.py`, and compares it with the Figma frame. To run your own app, add `APP_PATH=/path/to/your/app` in front of the command.
