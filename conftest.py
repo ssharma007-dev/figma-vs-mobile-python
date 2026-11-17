@@ -13,7 +13,8 @@ ENV VARS:
   iOS:     IOS_UDID (optional), DEVICE_NAME, PLATFORM_VERSION
 
 PREREQUISITES:
-  - `python figma_baseline.py` has uploaded the Figma designs (step 1)
+  - The Figma frames are exported with the Applitools Eyes Figma plugin and their
+    Baseline names are in figma_config.py (step 1; or run figma_baseline.py)
   - A local Appium server (`appium`) and a booted emulator / Simulator
   - static_instrumented_sample_application/ copied from the main branch
 """
@@ -37,13 +38,6 @@ def app_path(relative_path):
         pytest.exit("App not found: {}\nCopy static_instrumented_sample_application/ "
                     "from the main branch first (see README).".format(path))
     return path
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    report = outcome.get_result()
-    setattr(item, "rep_" + report.when, report)
 
 
 @pytest.fixture(scope="session")
@@ -135,18 +129,18 @@ def sdk_ios_driver(api_key, server_url):
 
 
 @pytest.fixture
-def figma_eyes(request, runner, api_key, server_url):
-    """Returns an Eyes instance pointed at the Figma baseline of one design."""
+def figma_eyes(runner, api_key, server_url):
+    """Returns a function that makes an Eyes instance pointed at one Figma baseline."""
     created = []
 
-    def _make(design):
+    def _make(baseline_env_name):
         config = Configuration()
         config.set_api_key(api_key)
         if server_url:
             config.set_server_url(server_url)
         config.set_batch(BatchInfo("Figma vs Device | Python"))
-        # The key line: compare against the baseline the Figma upload created.
-        config.set_baseline_env_name(design["baseline_env_name"])
+        # The key line: compare against the baseline the Figma plugin created.
+        config.set_baseline_env_name(baseline_env_name)
         config.set_match_level(MatchLevel[os.getenv("MATCH_LEVEL", "LAYOUT").upper()])
         eyes = Eyes(runner)
         eyes.set_configuration(config)
@@ -155,11 +149,7 @@ def figma_eyes(request, runner, api_key, server_url):
 
     yield _make
 
-    call = getattr(request.node, "rep_call", None)
+    # Tests close each Eyes after its check; anything still open failed midway.
     for eyes in created:
-        if call is None or call.failed or not eyes.is_open:
+        if eyes.is_open:
             eyes.abort()
-        else:
-            results = eyes.close(raise_ex=False)
-            print("\n{} → {} ({} mismatches) {}".format(
-                request.node.name, results.status, results.mismatches, results.url))
