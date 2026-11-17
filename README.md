@@ -123,6 +123,10 @@ The test prints one Eyes link per Figma frame. Open it in the Eyes Dashboard:
 - **Passed**: the app screen matches the Figma frame.
 - **Unresolved**: Eyes found differences; they are highlighted on the screen. Accept (thumbs up) or reject (thumbs down) each one.
 
+In the Eyes Dashboard (iOS, `CAPTURE=sdk`, frame `SDK / iOS / Full Page`): the Figma frame is the baseline on the left, the app screen is the checkpoint on the right.
+
+<img src="docs/screenshots/eyes-dashboard-sdk-ios-full-page.png" alt="Eyes Dashboard: Figma baseline vs iOS app checkpoint" width="800">
+
 <img src="docs/screenshots/eyes-baseline-vs-checkpoint-ios.png" alt="iOS: Figma baseline vs app checkpoint" width="560">
 
 <img src="docs/screenshots/eyes-baseline-vs-checkpoint-android.png" alt="Android: Figma baseline vs app checkpoint" width="560">

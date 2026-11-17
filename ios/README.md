@@ -118,6 +118,10 @@ The test prints one Eyes link per frame. Open it in the Eyes Dashboard:
 - **Passed**: the app screen matches the Figma frame.
 - **Unresolved**: Eyes found differences; they are highlighted on the screen. Accept (thumbs up) or reject (thumbs down) each one.
 
+In the Eyes Dashboard (iOS, `CAPTURE=sdk`, frame `SDK / iOS / Full Page`): the Figma frame is the baseline on the left, the app screen is the checkpoint on the right.
+
+<img src="../docs/screenshots/eyes-dashboard-sdk-ios-full-page.png" alt="Eyes Dashboard: Figma baseline vs iOS app checkpoint" width="800">
+
 <img src="../docs/screenshots/eyes-baseline-vs-checkpoint-ios.png" alt="iOS: Figma baseline vs app checkpoint" width="560">
 
 The baseline is the Figma frame; the checkpoint is the app screen. Here Checklist shows `0/4` in Figma and `1/4` in the app, and the test still passes: Layout checks position and structure, not text. Use `MATCH_LEVEL=STRICT` to catch text and colour differences too.
